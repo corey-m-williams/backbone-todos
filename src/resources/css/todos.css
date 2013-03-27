@@ -1,0 +1,38 @@
+#todo-list .editing .view{
+		display: none;
+}
+#todo-list .view {
+		display: inline-block;
+		width: 300px;
+		padding: 10px 0;
+}
+#todo-list .done .view{
+		text-decoration: line-through;
+}
+#todo-list .editing .edit{
+		display: inline-block;
+		width: 300px;
+		padding: 10px 0;
+		border: 1px solid black;
+}
+#todo-list .edit {
+		display: none;
+}
+
+#todo-list .destroy {
+		border: 1px solid grey;
+		padding: 3px;
+		border-radius: 5px;
+		background-color: white;
+		color: black;
+}
+
+#todo-list .destroy:hover {
+		background-color: grey;
+		color: white;
+		border: 1px solid black;
+}
+
+ul#todo-list {
+		list-style: none;
+}

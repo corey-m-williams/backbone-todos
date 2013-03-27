@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Todos</title>
+		<script src="js/jquery.js"></script>
+		<script src="js/underscore.js"></script>
+		<script src="js/backbone.js"></script>
+		<script src="js/backbone.localStorage.js"></script>
+		<link rel='stylesheet' type='text/css' href='css/todos.css' />
+		<script id='stats-template' type='text/template'>
+			<div class='stats'>
+				<% if (done) { %>
+					<button id='clear-completed'>Clear <%= done %> Completed <%= done == 1 ? 'item' : 'items' %></button>
+				<% } %>
+				Completed: <%= done %>/<%= done + remaining %> -- <%= remaining %> Left.
+			</div>
+		</script>
+		<!--
+				To print stuff in uderscore templates, you can either turn off templating %> ... <%
+				  you can also use print(...) to output stuff
+		-->
+		<script id='item-template' type='text/template'>
+			<input type='checkbox' class='toggle' <% if(done){ print("checked='checked'"); }%> />
+			<span class='view'><%- title %></span>
+			<input class='edit' value='<%- title %>' />
+			<button class='destroy'>Delete</button>
+		</script>
+	</head>
+	<body>
+		<h3>Todos</h3>
+		<div id='todoapp'>
+			<input type='text' id='new-todo' />
+			<div id='main'>
+				All Done: <input type='checkbox' id='toggle-all' />
+				<ul id='todo-list'>
+				</ul>
+			</div>
+			<footer></footer>
+		</div>
+		<script src="js/todos.js"></script>
+	</body>
+</html>
