@@ -12,7 +12,7 @@ $(function(){
 
 				//Toggle the done field of this todo item
 				toggle: function() {
-						this.save({done: !this.get("done")});
+						this.save({done: !this.get("done")}, {patch: true});
 				}
 		});
 
@@ -22,9 +22,9 @@ $(function(){
 				//Link this collection to a model
 				model: Todo,
 				//Save all of the items into a LocalStorage with the todos-backbone namespace
-				localStorage: new Backbone.LocalStorage("todos-backbone"),
+				//localStorage: new Backbone.LocalStorage("todos-backbone"),
 				//Use the node.js app I made as the storage
-				//url: '/todos_v1',
+				url: '/todos_v1',
 
 				//Filter for finished todos
 				done: function() {
@@ -107,7 +107,7 @@ $(function(){
 								//Destroy this todo if we empty it out
 								this.clear();
 						}else{
-								this.model.save({title: value});
+								this.model.save({title: value}, {patch: true});
 								this.$el.removeClass('editing');
 						}
 				},
@@ -208,7 +208,9 @@ $(function(){
 
 				toggleAllComplete: function(){
 						var done = this.allCheckbox.checked;
-						Todos.each(function(todo) { todo.save({'done': done}); });
+						Todos.each(function(todo) { todo.save({'done': done}, {patch: true}); });
+						//Todos.each(function(todo) { todo.save({'done': done}, {wait: true}); });
+						//Todos.sync();
 				}
 		});
 
