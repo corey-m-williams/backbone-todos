@@ -111,9 +111,9 @@ function todoUpdate(req, res){
 }
 
 function todoDelete(req, res){
-		var reqUrl = url.parse(req.url);
 		//  /collection/id
 		console.log('DELETE');
+		var reqUrl = url.parse(req.url);
 		var id = reqUrl.path.split('/')[2];
 		deleteTodo(id);
 		console.log("todos: %j", todos);
