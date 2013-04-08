@@ -7,11 +7,20 @@ var mime = require('mime');
 
 var todos = [];
 var apiLoc = "/todos_v1";
-var nextId = 1;
 
-function getNextId(){
-		return nextId++;
+//Generates a closed over counter
+//  defaults to starting at 0, otherwise starts at passed in value
+function makeCounter(start){
+		if(typeof(start) == 'undefined'){
+				start = 0;
+		}
+		var next = start;
+		return function(){
+				return next++;
+		};
 }
+
+var getNextId = makeCounter(1);
 
 function jsonHead(res){
 		res.setHeader('Content-Type', 'application/json');
