@@ -96,10 +96,7 @@
         todo-data (read-json (request-body req))]
     (if (contains? @todos id)
       (do
-        (swap! todos
-               #(update-in %
-                           [id]
-                           merge todo-data))
+        (swap! todos #(update-in % [id] merge todo-data))
         (json-response (@todos id)))
       (do-404 req))))
 

@@ -8,8 +8,6 @@
    ring.middleware.resource
    ring.middleware.file-info
    [ring.adapter.jetty :only [run-jetty]]
-   [clojure.java.io :only [reader]]
-   [clojure.data.json :only [json-str read-json]]
    [net.cgrand.moustache :exclude [not-found]]))
 
 (def my-app-handler
