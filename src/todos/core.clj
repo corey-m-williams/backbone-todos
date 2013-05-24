@@ -17,7 +17,8 @@
    (wrap-resource "resources")
    (wrap-file-info)
    ["todos_v1" &] todos/routes
-   [""] (fn [&req] {:status 200 :headers {"Content-type" "text/html"} :body (slurp "src/resources/todos.html")})
+   ;;[""] (fn [&req] {:status 200 :headers {"Content-type" "text/html"} :body (slurp "src/resources/todos.html")})
+   [""] (fn [&req] (resource-response "todos.html" {:root "resources"}))
    [&] do-404))
 
 (defonce server
@@ -25,5 +26,6 @@
 
 (defn reload []
   (.stop server)
-  (doall (map load ["util" "todos" "core"]))
+  ;;(doall (map load ["util" "todos" "core"]))
+  (use 'todos.core :reload-all)
   (.start server))

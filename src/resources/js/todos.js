@@ -119,7 +119,6 @@ $(function(){
 
 				//Delete this TODO
 				clear: function(){
-						//Doesn't seem to make the DELETE call to the server?
 						this.model.destroy();
 				}
 		});
