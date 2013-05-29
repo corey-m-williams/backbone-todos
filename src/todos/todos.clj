@@ -107,3 +107,52 @@
    :post create
    :patch patch
    :delete delete))
+
+;;Test code
+
+(defn random-string
+  "Generate from 1-4 2-5 character 'words' made up by
+   interleaving consonants and vowels"
+  []
+  (let [vowels (apply vector "aeiouy")
+        consonants (apply vector "bcdfghjklmnpqrstvwxz")]
+    (loop [words (inc (rand-int 4))
+           string []]
+      (if (zero? words)
+        (apply str string)
+        (recur (dec words)
+               (concat string
+                       (take (+ 2 (rand-int 4))
+                             (apply
+                              interleave (shuffle [(repeatedly #(rand-nth consonants))
+                                                   (repeatedly #(rand-nth vowels))])))
+                       (if (> words 1)
+                         [\space]
+                         nil)))))))
+
+(defn generate-todo
+  [id order]
+  {:id id
+   :order order
+   :done false
+   :title (random-string)})
+
+(defn generate-todos
+  [num start-id start-order]
+  (loop [acc {}
+         id (+ start-id num)
+         order (+ start-order num)]
+    (if (= start-id id)
+      acc
+      (recur
+       (assoc acc id (generate-todo id order))
+       (dec id)
+       (dec order)))))
+
+(defn add-todos
+  [num]
+  (swap! todos
+         merge
+         (generate-todos num
+                         (inc (apply max (conj (map :id (vals @todos)) 0)))
+                         (inc (apply max (conj (map :order (vals @todos)) 0))))))
