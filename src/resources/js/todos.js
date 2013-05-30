@@ -161,7 +161,7 @@ $(function(){
 						this.footer = this.$('footer');
 						this.main = $('#main');
 
-						Todos.fetch();
+						Todos.fetch({reset: true});
 				},
 
 				//Rerendering app just means refreshing statistics, items take care of themselves
@@ -181,11 +181,25 @@ $(function(){
 						this.allCheckbox.checked = !remaining;
 				},
 
+				renderTodo: function(todo){
+						var view = new TodoView({model: todo});
+						return view.render().el;
+				},
 				//Add a single todo item to the list
 				//Creates the view, renders it, and appends it to the main ul
 				addOne: function(todo){
-						var view = new TodoView({model: todo});
-						this.$('#todo-list').append(view.render().el);
+						this.$("#todo-list").append(this.renderTodo(todo));
+				},
+
+				addAll: function(){
+						var frag = document.createDocumentFragment();
+						var todoElts = Todos.each(function(todo){
+								frag.appendChild(this.renderTodo(todo));
+								}, this);
+						this.$("#todo-list").empty();
+						this.$("#todo-list").append(frag);
+						//This ran slowly since it updated the dom every element
+						//Todos.each(this.addOne, this);
 				},
 
 				createOnEnter: function(e){
@@ -208,6 +222,11 @@ $(function(){
 				toggleAllComplete: function(){
 						var done = this.allCheckbox.checked;
 						Todos.each(function(todo) { todo.save({'done': done}, {patch: true}); });
+
+						//This one didn't work to reduce number of ajax calls
+						//Todos.each(function(todo) { todo.set({'done': done}); });
+						//Todos.sync();
+
 						//Todos.each(function(todo) { todo.save({'done': done}, {wait: true}); });
 						//Todos.sync();
 				}

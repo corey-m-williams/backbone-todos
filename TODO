@@ -1,0 +1,3 @@
+I've gotten the initial load to run through a fragment and so run decently
+However, batch updates (all done/not done) runs really slowly, appears to do a save
+  for each model item instead of updating them all and then syncing
