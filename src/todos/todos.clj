@@ -79,15 +79,27 @@
 
 ;;UPDATE
 
-(defn update
+(defn update-many
   [req]
-  (let [id (parse-int (second (str/split (:path-info req) #"/")))
-        todo-data (read-json (request-body req))]
+  (println "update-all")
+  (let [todo-data (read-json (request-body req))]
+    (swap! todos merge (zipmap (map :id todo-data) todo-data))
+    (json-response (vals @todos))))
+
+(defn update-one
+  [id req]
+  (let [todo-data (read-json (request-body req))]
     (if (contains? @todos id)
       (do
         (swap! todos #(assoc % id todo-data))
         (json-response (@todos id)))
       (do-404 req))))
+
+(def update
+  (app
+   [""] update-many
+   [id] (partial update-one id)
+   [&] pass))
 
 ;;PATCH
 (defn patch

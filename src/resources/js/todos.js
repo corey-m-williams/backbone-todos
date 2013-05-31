@@ -191,15 +191,36 @@ $(function(){
 						this.$("#todo-list").append(this.renderTodo(todo));
 				},
 
+				startWork: function(){
+						this.$("#todo-list").hide();
+						this.$("#working").show();
+				},
+				stopWork: function(){
+						this.$("#todo-list").show();
+						this.$("#working").hide();
+				},
+
 				addAll: function(){
-						var frag = document.createDocumentFragment();
-						var todoElts = Todos.each(function(todo){
-								frag.appendChild(this.renderTodo(todo));
+						console.log("addAll")
+						this.startWork();
+						setTimeout((function(){
+								console.log("callback")
+								var frag = document.createDocumentFragment();
+								var start = new Date().getTime();
+								Todos.each(function(todo){
+										frag.appendChild(this.renderTodo(todo));
 								}, this);
-						this.$("#todo-list").empty();
-						this.$("#todo-list").append(frag);
-						//This ran slowly since it updated the dom every element
-						//Todos.each(this.addOne, this);
+								var end1 = new Date().getTime();
+								this.$("#todo-list").empty();
+								this.$("#todo-list").append(frag);
+								var end2 = new Date().getTime();
+								//This ran slowly since it updated the dom every element
+								//Todos.each(this.addOne, this);
+								console.log("Number of elements: " + Todos.size());
+								console.log("Time to gen elements: " + (end1 - start));
+								console.log("Time to append: " + (end2 - end1));
+								this.stopWork();
+						}).bind(this), 0);
 				},
 
 				createOnEnter: function(e){
@@ -221,17 +242,30 @@ $(function(){
 
 				toggleAllComplete: function(){
 						var done = this.allCheckbox.checked;
-						Todos.each(function(todo) { todo.save({'done': done}, {patch: true}); });
+						//This works, but is very slow since it does an ajax request and a render
+						//  for each Item
+						//Todos.each(function(todo) { todo.save({'done': done}, {patch: true}); });
 
-						//This one didn't work to reduce number of ajax calls
-						//Todos.each(function(todo) { todo.set({'done': done}); });
-						//Todos.sync();
+						//Batch update via one ajax request is not built in, so we need to implement it
+						this.startWork();
+						setTimeout((function(){
+								var newModels = _.map(Todos.models, function(todo) {
+										var newTodo = new Todo(_.extend(todo.clone().toJSON(), {done: done}));
 
-						//Todos.each(function(todo) { todo.save({'done': done}, {wait: true}); });
-						//Todos.sync();
+										return newTodo.toJSON();
+								});
+								$.ajax(Todos.url, {type: 'PUT',
+																	 data: JSON.stringify(newModels),
+																	 contentType: 'application/json', //indicate we're sending JSON
+																	 processData: false,
+																	 success: function(data, status, xhr){Todos.reset(data);}}); //Reset using the confirmation data
+						}).bind(this), 0);
 				}
 		});
 
 		//Kick things off by creating the app
 		var App = new AppView;
+
+		window.App = App;
+		window.Todos = Todos;
 });

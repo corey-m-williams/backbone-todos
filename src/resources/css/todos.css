@@ -36,3 +36,7 @@
 ul#todo-list {
 		list-style: none;
 }
+
+div#working{
+		padding: 1em;
+}
