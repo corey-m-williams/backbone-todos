@@ -192,12 +192,14 @@ $(function(){
 				},
 
 				startWork: function(){
-						this.$("#todo-list").hide();
-						this.$("#working").show();
+						//this.$("#todo-list").hide();
+						this.$("#working-text").show();
+						this.$("#working-overlay").show();
 				},
 				stopWork: function(){
-						this.$("#todo-list").show();
-						this.$("#working").hide();
+						//this.$("#todo-list").show();
+						this.$("#working-text").hide();
+						this.$("#working-overlay").hide();
 				},
 
 				addAll: function(){
