@@ -52,10 +52,19 @@
         {:status 200})
       {:status 500})))
 
+(defn delete-many
+  "Expects a list of ids to delete in the request body"
+  [req]
+  (println "delete-many")
+  (let [todo-ids (read-json (request-body req))]
+    (swap! todos #(reduce dissoc % todo-ids))
+    (json-response (vals @todos))))
+
 (def delete
   (app
-   [""] pass
-   [id] (partial remove-todo id)))
+   [""] delete-many
+   [id] (partial remove-todo id)
+   [&] pass))
 
 ;;READ
 (defn get-one
