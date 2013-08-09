@@ -239,6 +239,8 @@ $(function(){
 						//  any additional args are passed to method
 						//ex: this calls <todo>.destroy on all Todos
 						_.invoke(Todos.done(), 'destroy');
+						//TODO - move to generating list of completed TODOS, and submitting a 
+						//       DELETE request with the body as a json list of ids to remove
 						return false;
 				},
 
